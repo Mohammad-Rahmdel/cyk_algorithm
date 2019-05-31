@@ -1,6 +1,6 @@
 The Cocke–Younger–Kasami algorithm (alternatively called CYK, or CKY) is a parsing algorithm for context-free grammars, named after its inventors, John Cocke, Daniel Younger and Tadao Kasami.
 The standard version of CYK operates only on context-free grammars given in Chomsky normal form (CNF).
-The importance of the CYK algorithm stems from its high efficiency in certain situations. Using Big O notation, the worst case running time of CYK is O ( n 3 ⋅ | G | ) {\displaystyle {\mathcal {O}}\left(n^{3}\cdot \left|G\right|\right)} {\displaystyle {\mathcal {O}}\left(n^{3}\cdot \left|G\right|\right)}, where n {\displaystyle n} n is the length of the parsed string and | G | {\displaystyle \left|G\right|} {\displaystyle \left|G\right|} is the size of the CNF grammar G.
+The importance of the CYK algorithm stems from its high efficiency in certain situations. Using Big O notation, the worst case running time of CYK is O ( n^3 ⋅ |G| ), where n is the length of the parsed string and | G | is the size of the CNF grammar G.
 
 
 Pseudocode:
