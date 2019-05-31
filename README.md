@@ -25,6 +25,6 @@ python3 cyk.py
 
 input.txt contains the given input.
 Grammer.txt contains a free-context grammer.
-The code is sensitive to 's' as the starting symbol.  
+The code is sensitive to 'S' as the starting symbol.  
 Use uppercase characters as varaiables and lowercases as terminals.
 Seperate each production rule with '|' or a new line.
