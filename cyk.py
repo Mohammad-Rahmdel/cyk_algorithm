@@ -72,8 +72,8 @@ def CYK_Algorithm(bigs, littles, n):
 
 inp = read_input()
 grammer = read_grammer()
-bigs, littles = parse_grammer(grammer)
-matrix = CYK_Algorithm(bigs, littles, len(inp))
+uppers, lowers = parse_grammer(grammer)
+matrix = CYK_Algorithm(uppers, lowers, len(inp))
 
 # check whether last element in table contains starting symbol or not
 if(matrix[len(inp)-1][0].__contains__('S') == True):        
