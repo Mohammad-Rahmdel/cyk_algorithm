@@ -1,0 +1,202 @@
+%%% Template originaly created by Karol Kozioł (mail@karol-koziol.net) and modified for ShareLaTeX use
+
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{listings} % Required for inserting code snippets
+\usepackage[usenames,dvipsnames]{color} % Required for specifying custom colors and referring to colors by name
+
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{xcolor}
+
+\renewcommand\familydefault{\sfdefault}
+\usepackage{tgheros}
+\usepackage[defaultmono]{droidmono}
+
+\usepackage{amsmath,amssymb,amsthm,textcomp}
+\usepackage{enumerate}
+\usepackage{multicol}
+\usepackage{tikz}
+
+\usepackage{geometry}
+\geometry{total={210mm,297mm},
+left=25mm,right=25mm,%
+bindingoffset=0mm, top=20mm,bottom=20mm}
+
+
+\linespread{1.3}
+
+\newcommand{\linia}{\rule{\linewidth}{0.5pt}}
+
+% custom theorems if needed
+\newtheoremstyle{mytheor}
+    {1ex}{1ex}{\normalfont}{0pt}{\scshape}{.}{1ex}
+    {{\thmname{#1 }}{\thmnumber{#2}}{\thmnote{ (#3)}}}
+
+\theoremstyle{mytheor}
+\newtheorem{defi}{Definition}
+
+% my own titles
+\makeatletter
+\renewcommand{\maketitle}{
+\begin{center}
+\vspace{2ex}
+{\huge \textsc{\@title}}
+\vspace{1ex}
+\\
+\linia\\
+\@author \hfill \@date
+\vspace{4ex}
+\end{center}
+}
+\makeatother
+%%%
+
+% custom footers and headers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{}
+\chead{}
+\rhead{}
+\lfoot{Programming Assignment}
+\cfoot{}
+\rfoot{Page \thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+%
+
+% code listing settings
+\usepackage{listings}
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    aboveskip={1.0\baselineskip},
+    belowskip={1.0\baselineskip},
+    columns=fixed,
+    extendedchars=true,
+    breaklines=true,
+    tabsize=4,
+    prebreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+    frame=lines,
+    showtabs=false,
+    showspaces=false,
+    showstringspaces=false,
+    keywordstyle=\color[rgb]{0.627,0.126,0.941},
+    commentstyle=\color[rgb]{0.133,0.545,0.133},
+    stringstyle=\color[rgb]{01,0,0},
+    numbers=left,
+    numberstyle=\small,
+    stepnumber=1,
+    numbersep=10pt,
+    captionpos=t,
+    escapeinside={\%*}{*)}
+}
+
+%%%----------%%%----------%%%----------%%%----------%%%
+
+
+% Create a command to cleanly insert a snippet with the style above anywhere in the document
+\newcommand{\insertcode}[2]{\begin{itemize}\item[]\lstinputlisting[caption=#2,label=#1,style=Style1]{#1}\end{itemize}} % The first argument is the script location/filename and the second is a caption for the listing
+
+
+\begin{document}
+
+\title{CYK Algorithm Implementation using Python}
+
+\author{\large Mohammad Rahmdel - 9431305}
+
+\date{\large Automata Languages: Dr.Saghiri}
+
+\maketitle
+
+% \section*{Python Code}
+
+
+\begin{lstlisting}[caption=https://github.com/Mohammad-Rahmdel/cyk\_algorithm]
+
+def read_input():
+	file = open("input.txt","r") 
+	x = []
+	x = file.readlines()
+	x = x[0]
+	x = x[:-1] # ommiting '\n'
+	file.close()
+	return x
+
+def read_grammer():
+	file = open("Grammer.txt","r") 
+	x = []
+	x = file.readlines()
+	for i in range(len(x)): # ommiting '\n'
+		y = x[i]
+		x[i] = y[:-1]
+	file.close()
+	return x
+
+def parse_grammer(grammer):
+
+	uppers = []     # storing rules containing terminals (e.g. A -> BC)
+	lowers = []     # storing rules containing variables (e.g. B -> c)
+	
+	for rules in grammer :
+		left, rights = rules.split('->', 1)   # find product rules
+		left = left.strip()                   # removing extra spaces
+		rights = rights.strip()
+		right_split = rights.split('|')       # splitting rules 
+		for right in right_split:
+			right = right.strip()
+			if right.isupper():               # separating variables and terminals
+				uppers.append([left, right])
+			else:
+				lowers.append([left, right])
+	return uppers, lowers
+	
+	
+def CYK_Algorithm(bigs, littles, n):
+
+	# creating a table for dynamic programming part
+	matrix = [[set() for x in range(n)] for y in range(n)]  
+	
+	for i in range(n):
+		char = inp[i]
+		for x in littles:               # first row of the table
+			if char == x[1]:
+				matrix[0][i].add(x[0])
+				
+	for j in range(1, n):               # implementing CYK algorithm
+		for k in range(n-j):  
+			for l in range(j):
+				B = matrix[l][k]
+				C = matrix[j-l-1][k+l+1]
+				X = set()
+				for x in B:
+					for y in C:
+						X.add(x + y)
+				
+				for element in X:
+					for x in bigs:
+						if element == x[1]:
+							matrix[j][k].add(x[0])
+	return matrix
+
+inp = read_input()
+grammer = read_grammer()
+uppers, lowers = parse_grammer(grammer)
+matrix = CYK_Algorithm(uppers, lowers, len(inp))
+
+# check whether last element in table contains starting symbol or not
+if(matrix[len(inp)-1][0].__contains__('S') == True):        
+	print("The input can be produced by the given grammer.")
+else:
+	print("The input cannot be produced by the given grammer!")
+
+\end{lstlisting}
+
+
+
+%\insertcode{"cyk.py"}{Nena would be proud.} % The first argument is the script location/filename and the second is a caption for the listing
+
+
+\end{document}
